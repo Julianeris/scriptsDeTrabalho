@@ -3,7 +3,7 @@ import { parse } from "https://deno.land/std@0.82.0/encoding/csv.ts";
 
 
 const WAVE_API_TOKEN =
-  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlpuN3NqdEdqY3BmSmU4SnJzUXFaYSJ9.eyJpc3MiOiJodHRwczovL3RlbGVjYWxsLXByb2R1Y3Rpb24udXMuYXV0aDAuY29tLyIsInN1YiI6Imw3bFdCbnFxenZ4bU8wZkZNREpUUGN3bU1SSFZ0VUNOQGNsaWVudHMiLCJhdWQiOiJodHRwczovL2FwaS53YXZlLm5vbW8uY29tLmJyIiwiaWF0IjoxNzE3Njk0OTc0LCJleHAiOjE3MTc3ODEzNzQsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyIsImF6cCI6Imw3bFdCbnFxenZ4bU8wZkZNREpUUGN3bU1SSFZ0VUNOIn0.AMbAJ-HLl51cwjDXNJJSGJnuW3Rhj5YvaqfbAMxtMJbfZfPhsvU4jSteRSFV8aUlOUURDHBCXGaw3d22JI195pTdjK4a3wguGQQ6DrgwTdYsg671gcMxPKArFhBn9l-BDWCK9a7tDobPPvMAAQgNnTwv7IQx06B8Z0_ULpZivFrchw8D5PqMUVhWsTqH7l4nfYKyMR1ySPH6XbIBV7YX4BN47dLksOlecM4V9epwc34_k-DhHO2iNPSNYaZYheQf1oK5CrYHBl1tDRIvp4t7HaWX3bGKjrobMwe_lXgu3mg9C3cRyfHFFtM5A7tqLWAaAIQyAJGj875IOxzZ5CWPjg";
+"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlpuN3NqdEdqY3BmSmU4SnJzUXFaYSJ9.eyJpc3MiOiJodHRwczovL3RlbGVjYWxsLXByb2R1Y3Rpb24udXMuYXV0aDAuY29tLyIsInN1YiI6Imw3bFdCbnFxenZ4bU8wZkZNREpUUGN3bU1SSFZ0VUNOQGNsaWVudHMiLCJhdWQiOiJodHRwczovL2FwaS53YXZlLm5vbW8uY29tLmJyIiwiaWF0IjoxNzE4OTE3NTQ2LCJleHAiOjE3MTkwMDM5NDYsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyIsImF6cCI6Imw3bFdCbnFxenZ4bU8wZkZNREpUUGN3bU1SSFZ0VUNOIn0.Z1s_T4oZ1hPQ63BQWq77lYtKBo61wJ5GkyHa2z8hruZMvZmZkYer8m7X9w9LrKR0hR6oVg2HR5BlKCD34hYwiHuleO1repQfE81zwIrhyip_nxT-BkxwCPUa3qgp16awFpbw6SbZBmTo3PZQgC8bSgMzFLu1hHsNYeqkDnSGqmywpJTqOtvdjvjHZZaGUU6mHuKj-vOw5Eej8BTRWrVfyrXKLnQVrLjhUNJjLtmM1CUHYDSDYSMl9NIKgpa66dDVcFhYpN1RyPVZmCv8nnPgm6Ng3VTciaHsvE2YU1ItP9uGqWngTcZTL13jQYBYV-coKehMM8waepea5uPtgjX25A";
 const RECONCILIATION_ID = "15606f0e-e9cb-4ed2-8f2e-58096525d374";
 const REFERENCE_DATE = {
   start:"2024-01-01T00:00:00.000Z",
@@ -19,7 +19,7 @@ const BROKER_ID = "81dd2380-3eaf-44ab-9911-08c418aac30e";
 
   // const filename =
   //   "/Users/marcosaugusto/nomo/Migraçao Telecall Billing/Telecall/transactions_telecall_mar.csv";
-const filename = "C:/Users/Nomo - Julia/Downloads/Inconsistências - ausência do documento.xlsx - Inconsistências - ausência do d (1).csv";
+const filename = "/home/julia/Documents/planilha_telecall_abr3.csv";
 
 main();
 
@@ -97,8 +97,8 @@ async function main() {
             metadata: {
               mvnoInvoiceId: transaction.reconciliationId,
               mvnoId: transaction.brokerId,
-              customerTaxId: transaction.customerFederalTaxId,
-              msisdn: transaction.msisdn,
+              customerTaxId: transaction.customerFederalTaxId
+              //msisdn: transaction.msisdn,
             },
           }));
         }).flatMap((value) => value),
@@ -112,6 +112,9 @@ async function main() {
       const end = new Date();
       const delta = end.getTime() - start.getTime();
       console.log(`Invoice criada ${invoice.id} - ${result} - ${delta}ms\n`);
+      console.log('invoice criada', invoice);
+      //console.log(`Invoice criada ${invoice.id} - ${delta}ms\n`);
+
     }
   }
 }
@@ -123,7 +126,7 @@ async function getTransactionsFromSheets(sheetsFilename: string): Promise<any[]>
   type PlanilhaColumns = {
     name?: string;
     taxId: string;
-    msisdn: string;
+    //msisdn: string;
     description: string;
     price: string;
   };
@@ -135,7 +138,7 @@ async function getTransactionsFromSheets(sheetsFilename: string): Promise<any[]>
       transactionId: crypto.randomUUID(),
       customerFederalTaxId: row.taxId.trim(),
       productExternalCode: productExternalCode,
-      msisdn: row.msisdn.trim(),
+      //msisdn: row.msisdn.trim(),
       description: row.description.trim(),
       amount: row.price.replace(",", "."),
       referenceStartDate: REFERENCE_DATE.start,
@@ -145,15 +148,18 @@ async function getTransactionsFromSheets(sheetsFilename: string): Promise<any[]>
     }));
 
     result.push(
-      "invoiceId,transactionId,customerFederalTaxId,productExternalCode,msisdn,description,amount,referenceStartDate,referenceEndDate,autoApprove,brokerId,reconciliationId",
+      //"invoiceId,transactionId,customerFederalTaxId,productExternalCode,msisdn,description,amount,referenceStartDate,referenceEndDate,autoApprove,brokerId,reconciliationId",
+      "invoiceId,transactionId,customerFederalTaxId,productExternalCode,description,amount,referenceStartDate,referenceEndDate,autoApprove,brokerId,reconciliationId",
     );
 
     transactions.forEach((row) => {
-      if (row.msisdn.length !== 13) throw Error(`Invalid msisdn ${row.msisdn}`);
+      //if (row.msisdn.length !== 13) throw Error(`Invalid msisdn ${row.msisdn}`);
       if (row.customerFederalTaxId.length !== 11 && row.customerFederalTaxId.length !== 14) throw Error(`Invalid tax id ${row.customerFederalTaxId}`);
 
       result.push(
-        `"${row.invoiceId}","${row.transactionId}","${row.customerFederalTaxId}","${row.productExternalCode}","${row.msisdn}","${row.description}","${row.amount}","${row.referenceStartDate}","${row.referenceEndDate}","${row.autoApprove}","${BROKER_ID}","${RECONCILIATION_ID}"`,
+        //`"${row.invoiceId}","${row.transactionId}","${row.customerFederalTaxId}","${row.productExternalCode}","${row.msisdn}","${row.description}","${row.amount}","${row.referenceStartDate}","${row.referenceEndDate}","${row.autoApprove}","${BROKER_ID}","${RECONCILIATION_ID}"`,
+        `"${row.invoiceId}","${row.transactionId}","${row.customerFederalTaxId}","${row.productExternalCode}","${row.description}","${row.amount}","${row.referenceStartDate}","${row.referenceEndDate}","${row.autoApprove}","${BROKER_ID}","${RECONCILIATION_ID}"`,
+
       );
     });
   } catch (error) {
@@ -325,4 +331,3 @@ async function createInvoice(invoice: any): Promise<string> {
 
   return result;
 }
-
